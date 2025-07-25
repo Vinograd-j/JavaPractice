@@ -3,7 +3,6 @@ package net.vinograd.newlookatjava.console.hendlers;
 import net.vinograd.newlookatjava.console.CommandType;
 import net.vinograd.newlookatjava.console.hendlers.abstr.CommandExecutor;
 import net.vinograd.newlookatjava.service.AccountService;
-import net.vinograd.newlookatjava.service.UserService;
 import org.springframework.stereotype.Component;
 
 import java.util.Scanner;
@@ -15,12 +14,9 @@ public class AccountDepositCommand implements CommandExecutor {
 
     private final AccountService accountService;
 
-    private final UserService userService;
-
-    public AccountDepositCommand(Scanner scanner, AccountService accountService, UserService userService) {
+    public AccountDepositCommand(Scanner scanner, AccountService accountService) {
         this.scanner = scanner;
         this.accountService = accountService;
-        this.userService = userService;
     }
 
     @Override

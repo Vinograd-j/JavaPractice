@@ -1,7 +1,9 @@
 package net.vinograd.newlookatjava.service;
 
+import jakarta.transaction.Transactional;
 import net.vinograd.newlookatjava.model.Account;
 import net.vinograd.newlookatjava.model.User;
+import net.vinograd.newlookatjava.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -9,37 +11,40 @@ import java.util.*;
 @Service
 public class UserService {
 
-    private final Map<Integer, User> users;
-
-    private int idCounter;
+    private final UserRepository userRepository;
 
     private final AccountService accountService;
 
-    public UserService(AccountService accountService){
+    public UserService(AccountService accountService, UserRepository userRepository){
         this.accountService = accountService;
-        this.users = new HashMap<>();
-        this.idCounter = 0;
+        this.userRepository = userRepository;
     }
 
+    @Transactional
     public User createNewUser(String login){
-        if (users.values().stream().anyMatch(x -> x.getLogin().equals(login)))
+        if (this.userRepository.findUserByLogin(login).isPresent())
             throw new IllegalArgumentException("This login is already taken (login = %s)".formatted(login));
 
-        User user = new User(++idCounter, login, new ArrayList<>());
-        Account firstUserAccount = accountService.createNewAccount(user);
-        user.addAccount(firstUserAccount);
+        User user = new User(login, new ArrayList<>());
 
-        users.put(idCounter, user);
+        this.userRepository.save(user);
+        accountService.createNewAccount(user);
 
         return user;
     }
 
-    public Optional<User> findUserById(int id){
-        return Optional.ofNullable(users.get(id));
+    public void removeAccount(User user, Account account){
+        user.removeAccount(account);
+        this.userRepository.save(user);
     }
 
-    public List<User> getAllUsers(){
-        return users.values().stream().toList();
+    public Optional<User> findUserById(int id){
+        return this.userRepository.findById(id);
+    }
+
+    @Transactional
+    public List<User> getAllUsers() {
+        return this.userRepository.findAll();
     }
 
 }

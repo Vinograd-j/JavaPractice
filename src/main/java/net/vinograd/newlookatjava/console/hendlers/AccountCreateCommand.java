@@ -25,11 +25,11 @@ public class AccountCreateCommand implements CommandExecutor {
 
     @Override
     public void execute() {
-        System.out.println("Input userId");
+        System.out.println("Input user id");
         int id = scanner.nextInt();
 
         userService.findUserById(id).ifPresentOrElse(user -> {
-            user.addAccount(accountService.createNewAccount(user));
+            accountService.createNewAccount(user);
             System.out.printf("Account with id = %d has been created! %n", user.getId());
         }, () -> {
             throw new IllegalArgumentException("There is no user with this id");

@@ -3,7 +3,6 @@ package net.vinograd.newlookatjava.console.hendlers;
 import net.vinograd.newlookatjava.console.CommandType;
 import net.vinograd.newlookatjava.console.hendlers.abstr.CommandExecutor;
 import net.vinograd.newlookatjava.model.Account;
-import net.vinograd.newlookatjava.model.User;
 import net.vinograd.newlookatjava.service.AccountService;
 import net.vinograd.newlookatjava.service.UserService;
 import org.springframework.stereotype.Component;
@@ -31,10 +30,7 @@ public class AccountCloseCommand implements CommandExecutor {
 
         Account account = accountService.findAccountById(id).orElseThrow(() -> new IllegalArgumentException("This account does not exists"));
 
-        User user = userService.findUserById(account.getUserId()).orElseThrow(() -> new IllegalArgumentException("This account is not kept by any user!"));
-
-        user.removeAccount(account);
-        accountService.closeAccount(account.getId());
+        this.userService.removeAccount(account.getUser(), account);
     }
 
     @Override

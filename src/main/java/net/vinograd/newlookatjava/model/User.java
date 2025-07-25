@@ -1,32 +1,47 @@
 package net.vinograd.newlookatjava.model;
 
-import lombok.AllArgsConstructor;
+import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
+@Table(name = "client")
 public class User {
 
     @Getter
-    private final int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     @Getter
-    private final String login;
+    private String login;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Account> accounts;
 
-    public void addAccount(Account account){
-        accounts.add(account);
+    public User(String login, List<Account> accounts) {
+        this.login = login;
+        this.accounts = accounts;
     }
 
-    public void removeAccount(Account account){
-        accounts.remove(account);
+    public User(Integer id, String login) {
+        this.id = id;
+        this.login = login;
+        this.accounts = new ArrayList<>();
     }
 
     public List<Account> getAccounts(){
         return Collections.unmodifiableList(accounts);
+    }
+
+    public void removeAccount(Account account){
+        this.accounts.remove(account);
     }
 
 }
