@@ -33,6 +33,7 @@ public class UserService {
         return user;
     }
 
+    @Transactional
     public void removeAccount(User user, Account account){
         user.removeAccount(account);
         this.userRepository.save(user);

@@ -1,5 +1,6 @@
 package net.vinograd.newlookatjava.console.hendlers;
 
+import net.vinograd.newlookatjava.api.exception.errors.NotEnoughMoney;
 import net.vinograd.newlookatjava.console.CommandType;
 import net.vinograd.newlookatjava.console.hendlers.abstr.CommandExecutor;
 import net.vinograd.newlookatjava.model.Account;
@@ -33,16 +34,13 @@ public class AccountTransferCommand implements CommandExecutor {
         Account receiverAccount = accountService.findAccountById(receiverId).orElseThrow(() -> new IllegalArgumentException("This account does not exists"));
 
         System.out.println("Input amount of money");
-        int amount = scanner.nextInt();
+        double amount = scanner.nextDouble();
 
         try{
-            accountService.withDrawMoney(senderAccount, amount);
-        }catch (IllegalArgumentException e){
+            accountService.transferMoney(senderAccount, receiverAccount, amount);
+        }catch (NotEnoughMoney e){
             System.out.println("Sender does not have enough money");
-            return;
         }
-
-        accountService.addMoney(receiverAccount, amount);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package net.vinograd.newlookatjava.service;
 
 import jakarta.transaction.Transactional;
+import net.vinograd.newlookatjava.api.exception.errors.NotEnoughMoney;
 import net.vinograd.newlookatjava.model.Account;
 import net.vinograd.newlookatjava.model.User;
 import net.vinograd.newlookatjava.repository.AccountRepository;
@@ -33,18 +34,24 @@ public class AccountService {
     }
 
     @Transactional
-    public void withDrawMoney(Account account, int amount){
+    public void withDrawMoney(Account account, double amount){
         if (account.getMoneyAmount() - (amount + amount * commission) < 0.0)
-            throw new IllegalArgumentException("Not enough money! Required: %f but account only has: %f".formatted(amount + amount * commission, account.getMoneyAmount()));
+            throw new NotEnoughMoney(account.getId());
 
         account.withdrawMoney(amount + amount * commission);
         this.accountRepository.save(account);
     }
 
     @Transactional
-    public void addMoney(Account account, int amount){
+    public void addMoney(Account account, double amount){
         account.addMoney(amount);
         this.accountRepository.save(account);
+    }
+
+    @Transactional
+    public void transferMoney(Account sender, Account receiver, Double amount){
+        sender.withdrawMoney(amount * commission);
+        receiver.addMoney(amount);
     }
 
     public Optional<Account> findAccountById(int id){
@@ -54,12 +61,5 @@ public class AccountService {
     public List<Account> getAllAccounts(){
         return this.accountRepository.findAll();
     }
-
-//    @Transactional
-//    public void closeAccount(int accountId){
-//        Account account = this.accountRepository.findById(accountId).orElseThrow(() -> new IllegalArgumentException("Wrong account id provided"));
-//
-//        this.accountRepository.delete(account);
-//    }
 
 }

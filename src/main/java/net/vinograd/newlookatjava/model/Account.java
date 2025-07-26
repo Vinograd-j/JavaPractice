@@ -26,7 +26,7 @@ public class Account {
         this.moneyAmount = moneyAmount;
     }
 
-    public void addMoney(int amount){
+    public void addMoney(double amount){
         moneyAmount += amount;
     }
 
