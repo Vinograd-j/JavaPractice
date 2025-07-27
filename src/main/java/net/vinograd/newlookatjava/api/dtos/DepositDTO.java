@@ -6,21 +6,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
-@Setter
-@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDTO {
+@Setter
+@Getter
+public class DepositDTO {
 
     @NotNull
-    private int id;
+    private Integer accountId;
 
     @NotNull
-    private String login;
-
-    @NotNull
-    private List<AccountDTO> accounts;
+    private Double amount;
 
 }

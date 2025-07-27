@@ -6,21 +6,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
-@Setter
-@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDTO {
+@Setter
+@Getter
+public class TransferDTO {
 
     @NotNull
-    private int id;
+    private Integer senderAccountId;
 
     @NotNull
-    private String login;
+    private Integer receiverAccountId;
 
     @NotNull
-    private List<AccountDTO> accounts;
+    private Double amount;
 
 }

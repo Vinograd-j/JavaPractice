@@ -34,9 +34,9 @@ public class UserService {
     }
 
     @Transactional
-    public void removeAccount(User user, Account account){
-        user.removeAccount(account);
-        this.userRepository.save(user);
+    public void removeAccount(Account account){
+        account.getUser().removeAccount(account);
+        this.userRepository.save(account.getUser());
     }
 
     public Optional<User> findUserById(int id){

@@ -1,13 +1,17 @@
 package net.vinograd.newlookatjava.api.controllers;
 
+import jakarta.validation.Valid;
+import net.vinograd.newlookatjava.api.dtos.DepositDTO;
+import net.vinograd.newlookatjava.api.dtos.TransferDTO;
+import net.vinograd.newlookatjava.api.dtos.WithdrawDTO;
 import net.vinograd.newlookatjava.api.exception.errors.AccountNotFoundException;
 import net.vinograd.newlookatjava.api.exception.errors.UserNotFoundException;
 import net.vinograd.newlookatjava.model.Account;
-import net.vinograd.newlookatjava.model.User;
 import net.vinograd.newlookatjava.service.AccountService;
 import net.vinograd.newlookatjava.service.UserService;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -27,33 +31,39 @@ public class AccountController {
         this.accountService.createNewAccount(userService.findUserById(userId).orElseThrow(() -> new UserNotFoundException(userId)));
     }
 
-    @PostMapping("/accounts/close/{userId}/{accountId}")
-    public void closeAccount(@PathVariable Integer userId, @PathVariable Integer accountId){
-        User user = this.userService.findUserById(userId).orElseThrow(() -> new UserNotFoundException(userId));
-        Account account = this.accountService.findAccountById(accountId).orElseThrow(() -> new AccountNotFoundException(accountId));
+    @PostMapping("/accounts/close/{accountId}")
+    public void closeAccount(@PathVariable Integer accountId){
+        Account account = this.accountService.findAccountById(accountId).
+                orElseThrow(() -> new AccountNotFoundException(accountId));
 
-        this.userService.removeAccount(user, account);
+        this.userService.removeAccount(account);
     }
 
-    @PostMapping("/accounts/deposit/{accountId}/{amount}")
-    public void depositMoney(@PathVariable Integer accountId, @PathVariable Double amount){
-        Account account = this.accountService.findAccountById(accountId).orElseThrow(() -> new AccountNotFoundException(accountId));
-        this.accountService.addMoney(account, amount);
+    @PostMapping("/accounts/deposit")
+    public void depositMoney(@Valid @RequestBody DepositDTO depositDTO){
+        Account account = this.accountService.findAccountById(depositDTO.getAccountId())
+                .orElseThrow(() -> new AccountNotFoundException(depositDTO.getAccountId()));
+
+        this.accountService.addMoney(account, depositDTO.getAmount());
     }
 
-    @PostMapping("/accounts/transfer/{senderId}/{receiverId}/{amount}")
-    public void transferMoney(@PathVariable Integer senderId, @PathVariable Integer receiverId, @PathVariable Double amount){
-        Account sender = this.accountService.findAccountById(senderId).orElseThrow(() -> new AccountNotFoundException(senderId));
-        Account receiver = this.accountService.findAccountById(receiverId).orElseThrow(() -> new AccountNotFoundException(receiverId));
+    @PostMapping("/accounts/transfer")
+    public void transferMoney(@Valid @RequestBody TransferDTO transferDTO){
+        Account sender = this.accountService.findAccountById(transferDTO.getSenderAccountId())
+                .orElseThrow(() -> new AccountNotFoundException(transferDTO.getSenderAccountId()));
 
-        this.accountService.transferMoney(sender, receiver, amount);
+        Account receiver = this.accountService.findAccountById(transferDTO.getReceiverAccountId())
+                .orElseThrow(() -> new AccountNotFoundException(transferDTO.getReceiverAccountId()));
+
+        this.accountService.transferMoney(sender, receiver, transferDTO.getAmount());
     }
 
-    @PostMapping("/accounts/withdraw/{accountId}/{amount}")
-    public void withdrawMoney(@PathVariable Integer accountId, @PathVariable Double amount){
-        Account account = this.accountService.findAccountById(accountId).orElseThrow(() -> new AccountNotFoundException(accountId));
+    @PostMapping("/accounts/withdraw")
+    public void withdrawMoney(@Valid @RequestBody WithdrawDTO withdrawDTO){
+        Account account = this.accountService.findAccountById(withdrawDTO.getAccountId())
+                .orElseThrow(() -> new AccountNotFoundException(withdrawDTO.getAccountId()));
 
-        this.accountService.withDrawMoney(account, amount);
+        this.accountService.withdrawMoney(account, withdrawDTO.getAmount());
     }
 
 }

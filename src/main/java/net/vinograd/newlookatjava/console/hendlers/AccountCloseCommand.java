@@ -30,7 +30,7 @@ public class AccountCloseCommand implements CommandExecutor {
 
         Account account = accountService.findAccountById(id).orElseThrow(() -> new IllegalArgumentException("This account does not exists"));
 
-        this.userService.removeAccount(account.getUser(), account);
+        this.userService.removeAccount(account);
     }
 
     @Override

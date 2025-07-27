@@ -34,7 +34,7 @@ public class AccountService {
     }
 
     @Transactional
-    public void withDrawMoney(Account account, double amount){
+    public void withdrawMoney(Account account, double amount){
         if (account.getMoneyAmount() - (amount + amount * commission) < 0.0)
             throw new NotEnoughMoney(account.getId());
 
@@ -50,7 +50,7 @@ public class AccountService {
 
     @Transactional
     public void transferMoney(Account sender, Account receiver, Double amount){
-        sender.withdrawMoney(amount * commission);
+        withdrawMoney(sender, amount + amount * commission);
         receiver.addMoney(amount);
     }
 

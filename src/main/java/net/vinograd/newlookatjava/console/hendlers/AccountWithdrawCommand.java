@@ -28,7 +28,7 @@ public class AccountWithdrawCommand implements CommandExecutor {
         int amount = scanner.nextInt();
 
         this.accountService.findAccountById(accountId).ifPresentOrElse(account -> {
-            accountService.withDrawMoney(account, amount);
+            accountService.withdrawMoney(account, amount);
             System.out.printf("Amount withdrawn. Current balance: %f%n", account.getMoneyAmount());
         }, () -> {
             throw new IllegalArgumentException("There is no user with this id");
