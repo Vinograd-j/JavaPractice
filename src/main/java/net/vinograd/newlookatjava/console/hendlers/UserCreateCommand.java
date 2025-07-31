@@ -28,7 +28,10 @@ public class UserCreateCommand implements CommandExecutor {
         if (userService.getAllUsers().stream().anyMatch(user -> user.getLogin().equals(login)))
             throw new IllegalArgumentException("Provided login is taken. Try another one");
 
-        User newUser = userService.createNewUser(login);
+        System.out.println("Enter a password");
+        String password = scanner.nextLine();
+
+        User newUser = userService.createNewUser(login, password);
 
         System.out.printf("User has been created %s%n", newUser.getLogin());
     }

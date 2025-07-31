@@ -15,7 +15,7 @@ import java.util.List;
 public class UserDTO {
 
     @NotNull
-    private int id;
+    private Integer id;
 
     @NotNull
     private String login;

@@ -5,7 +5,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -22,18 +21,16 @@ public class User {
     @Getter
     private String login;
 
+    @Getter
+    private String password;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Account> accounts;
 
-    public User(String login, List<Account> accounts) {
+    public User(String login, String password, List<Account> accounts) {
         this.login = login;
+        this.password = password;
         this.accounts = accounts;
-    }
-
-    public User(Integer id, String login) {
-        this.id = id;
-        this.login = login;
-        this.accounts = new ArrayList<>();
     }
 
     public List<Account> getAccounts(){

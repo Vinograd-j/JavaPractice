@@ -21,11 +21,11 @@ public class UserService {
     }
 
     @Transactional
-    public User createNewUser(String login){
+    public User createNewUser(String login, String password){
         if (this.userRepository.findUserByLogin(login).isPresent())
             throw new IllegalArgumentException("This login is already taken (login = %s)".formatted(login));
 
-        User user = new User(login, new ArrayList<>());
+        User user = new User(login, password, new ArrayList<>());
 
         this.userRepository.save(user);
         accountService.createNewAccount(user);
@@ -41,6 +41,10 @@ public class UserService {
 
     public Optional<User> findUserById(int id){
         return this.userRepository.findById(id);
+    }
+
+    public Optional<User> findUserByLogin(String login){
+        return this.userRepository.findUserByLogin(login);
     }
 
     @Transactional

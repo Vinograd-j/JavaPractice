@@ -27,8 +27,8 @@ public class AccountController {
     }
 
     @PostMapping("/accounts/create/{userId}")
-    public void createAccount(@PathVariable Integer userId){
-        this.accountService.createNewAccount(userService.findUserById(userId).orElseThrow(() -> new UserNotFoundException(userId)));
+    public Account createAccount(@PathVariable Integer userId){
+        return this.accountService.createNewAccount(userService.findUserById(userId).orElseThrow(() -> new UserNotFoundException(userId)));
     }
 
     @PostMapping("/accounts/close/{accountId}")
