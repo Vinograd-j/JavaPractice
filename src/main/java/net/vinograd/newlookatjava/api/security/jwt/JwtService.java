@@ -12,7 +12,11 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    KeyPair pair = Jwts.SIG.RS256.keyPair().build();
+    private final KeyPair pair;
+
+    public JwtService(){
+        this.pair = Jwts.SIG.RS256.keyPair().build();
+    }
 
     public String extractUsername(String token){
         return extractClaim(token, Claims::getSubject);
@@ -27,7 +31,7 @@ public class JwtService {
                 .builder()
                 .subject(user.getLogin())
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 500 * 60))
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 15 * 60))
                 .signWith(pair.getPrivate(), Jwts.SIG.RS256)
                 .compact();
     }
@@ -56,6 +60,5 @@ public class JwtService {
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
-
 
 }

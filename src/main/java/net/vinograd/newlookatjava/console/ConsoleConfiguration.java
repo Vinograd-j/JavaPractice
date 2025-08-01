@@ -1,6 +1,6 @@
 package net.vinograd.newlookatjava.console;
 
-import net.vinograd.newlookatjava.console.hendlers.abstr.CommandExecutor;
+import net.vinograd.newlookatjava.console.handlers.abstr.CommandExecutor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

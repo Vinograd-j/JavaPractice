@@ -1,8 +1,8 @@
-package net.vinograd.newlookatjava.console.hendlers;
+package net.vinograd.newlookatjava.console.handlers;
 
 import net.vinograd.newlookatjava.api.exception.errors.NotEnoughMoney;
 import net.vinograd.newlookatjava.console.CommandType;
-import net.vinograd.newlookatjava.console.hendlers.abstr.CommandExecutor;
+import net.vinograd.newlookatjava.console.handlers.abstr.CommandExecutor;
 import net.vinograd.newlookatjava.model.Account;
 import net.vinograd.newlookatjava.service.AccountService;
 import org.springframework.stereotype.Component;

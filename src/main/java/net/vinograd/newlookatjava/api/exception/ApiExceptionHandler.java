@@ -56,4 +56,11 @@ public class ApiExceptionHandler {
         return ResponseEntity.badRequest().body(errors);
     }
 
+    @ExceptionHandler(IllegalAccessException.class)
+    public ResponseEntity<?> handleIllegalAccessException(IllegalAccessException ex){
+        Map.Entry<String, String> error = new AbstractMap.SimpleEntry<>("message", ex.getMessage());
+
+        return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
+    }
+
 }

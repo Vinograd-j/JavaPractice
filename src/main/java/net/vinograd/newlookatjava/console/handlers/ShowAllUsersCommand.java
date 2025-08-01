@@ -1,7 +1,7 @@
-package net.vinograd.newlookatjava.console.hendlers;
+package net.vinograd.newlookatjava.console.handlers;
 
 import net.vinograd.newlookatjava.console.CommandType;
-import net.vinograd.newlookatjava.console.hendlers.abstr.CommandExecutor;
+import net.vinograd.newlookatjava.console.handlers.abstr.CommandExecutor;
 import net.vinograd.newlookatjava.service.UserService;
 import org.springframework.stereotype.Component;
 

@@ -1,6 +1,6 @@
 package net.vinograd.newlookatjava.console;
 
-import net.vinograd.newlookatjava.console.hendlers.abstr.CommandExecutor;
+import net.vinograd.newlookatjava.console.handlers.abstr.CommandExecutor;
 
 import java.util.Arrays;
 import java.util.Map;

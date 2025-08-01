@@ -6,9 +6,11 @@ import net.vinograd.newlookatjava.api.dtos.TransferDTO;
 import net.vinograd.newlookatjava.api.dtos.WithdrawDTO;
 import net.vinograd.newlookatjava.api.exception.errors.AccountNotFoundException;
 import net.vinograd.newlookatjava.api.exception.errors.UserNotFoundException;
+import net.vinograd.newlookatjava.api.security.dtos.UserDetails;
 import net.vinograd.newlookatjava.model.Account;
 import net.vinograd.newlookatjava.service.AccountService;
 import net.vinograd.newlookatjava.service.UserService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -48,9 +50,12 @@ public class AccountController {
     }
 
     @PostMapping("/accounts/transfer")
-    public void transferMoney(@Valid @RequestBody TransferDTO transferDTO){
+    public void transferMoney(@AuthenticationPrincipal UserDetails userDetails, @Valid @RequestBody TransferDTO transferDTO) throws IllegalAccessException {
         Account sender = this.accountService.findAccountById(transferDTO.getSenderAccountId())
                 .orElseThrow(() -> new AccountNotFoundException(transferDTO.getSenderAccountId()));
+
+        if (sender.getUser().getId() != userDetails.getId())
+            throw new IllegalAccessException("You dont own account with provided sender id!");
 
         Account receiver = this.accountService.findAccountById(transferDTO.getReceiverAccountId())
                 .orElseThrow(() -> new AccountNotFoundException(transferDTO.getReceiverAccountId()));
@@ -59,11 +64,14 @@ public class AccountController {
     }
 
     @PostMapping("/accounts/withdraw")
-    public void withdrawMoney(@Valid @RequestBody WithdrawDTO withdrawDTO){
+    public void withdrawMoney(@AuthenticationPrincipal UserDetails userDetails, @Valid @RequestBody WithdrawDTO withdrawDTO) throws IllegalAccessException {
         Account account = this.accountService.findAccountById(withdrawDTO.getAccountId())
                 .orElseThrow(() -> new AccountNotFoundException(withdrawDTO.getAccountId()));
 
-        this.accountService.withdrawMoney(account, withdrawDTO.getAmount());
+        if (account.getUser().getId() == userDetails.getId())
+            this.accountService.withdrawMoney(account, withdrawDTO.getAmount());
+        else
+            throw new IllegalAccessException("You cant withdraw money because this is not your account");
     }
 
 }

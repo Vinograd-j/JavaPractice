@@ -1,4 +1,4 @@
-package net.vinograd.newlookatjava.console.hendlers.abstr;
+package net.vinograd.newlookatjava.console.handlers.abstr;
 
 import net.vinograd.newlookatjava.console.CommandType;
 
