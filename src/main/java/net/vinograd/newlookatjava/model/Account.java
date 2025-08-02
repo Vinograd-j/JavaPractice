@@ -19,6 +19,7 @@ public class Account {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(name = "money_amount", nullable = false)
     private double moneyAmount;
 
     public Account(User user, double moneyAmount) {

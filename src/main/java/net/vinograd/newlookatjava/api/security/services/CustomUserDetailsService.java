@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class UserDetailsService {
+public class CustomUserDetailsService {
 
     private final UserService userService;
 
@@ -17,5 +17,4 @@ public class UserDetailsService {
         User user = userService.findUserByLogin(login).orElseThrow(() -> new UserNotFoundException("User with name " + login + " not found"));
         return new UserDetails(user.getId(), user.getLogin());
     }
-
 }
