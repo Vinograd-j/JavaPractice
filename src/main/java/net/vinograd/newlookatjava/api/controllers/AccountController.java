@@ -17,8 +17,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.time.Period;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -90,19 +89,19 @@ public class AccountController {
         return this.transactionService.getAllAccountTransactions(accountId);
     }
 
-    @GetMapping("/operations/{accountId}")
+    @GetMapping("/operations/period/{accountId}")
     public List<Transaction> allTransactionsPeriod(
              @AuthenticationPrincipal UserDetails userDetails,
              @PathVariable Integer accountId,
-             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate from,
-             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate to) throws IllegalAccessException {
+             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from,
+             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to) throws IllegalAccessException {
 
         Account account = this.accountService.findAccountById(accountId).orElseThrow(() -> new AccountNotFoundException(accountId));
 
         if (account.getUser().getId() != userDetails.getId())
             throw new IllegalAccessException("You cant see someone else's account!");
 
-        return this.transactionService.getAllAccountTransactionsPeriod(accountId, Period.between(from, to));
+        return this.transactionService.getAllAccountTransactionsPeriod(accountId, from, to);
     }
 
 }

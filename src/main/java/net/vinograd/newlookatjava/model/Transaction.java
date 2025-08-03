@@ -25,7 +25,7 @@ public class Transaction {
     @Column(name = "receiver_id")
     private Integer receiverId;
 
-    @Column(name = "receiver_id", nullable = false)
+    @Column(name = "amount", nullable = false)
     private double amount;
 
     @Column(name = "transaction_date", nullable = false)

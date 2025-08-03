@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.util.List;
 
 @Service
@@ -16,11 +15,8 @@ public class TransactionService {
 
     private final TransactionRepository transactionRepository;
 
-    public List<Transaction> getAllAccountTransactionsPeriod(int accountId, Period period) {
-        LocalDateTime currentTime = LocalDateTime.now();
-        LocalDateTime timeReferencePoint = currentTime.minus(period);
-
-        return this.transactionRepository.findTransactionsByTransactionDateAfterAndAccountId(timeReferencePoint, accountId);
+    public List<Transaction> getAllAccountTransactionsPeriod(int accountId, LocalDateTime from, LocalDateTime to) {
+        return this.transactionRepository.findAllByAccountIdAndTransactionDateBetween(accountId, from, to);
     }
 
     public List<Transaction> getAllAccountTransactions(int accountId) {
@@ -33,3 +29,4 @@ public class TransactionService {
     }
 
 }
+// localhost:8080/accounts/operations/period/1?from=2025-07-01T00:00:00&to=2025-08-01T23:59:59
